@@ -12,16 +12,21 @@ const PATHS = {
     'sys/namespaces',
     'sys/control-group/',
   ],
+  // The order of policies and tools determines which route the navigation links to.
   policies: ['sys/policies/acl', 'sys/policies/rgp', 'sys/policies/egp'],
   tools: [
-    'sys/wrapping/lookup',
-    'sys/wrapping/rewrap',
-    'sys/wrapping/unwrap',
     'sys/wrapping/wrap',
+    'sys/wrapping/lookup',
+    'sys/wrapping/unwrap',
+    'sys/wrapping/rewrap',
     'sys/tools/random',
     'sys/tools/hash',
   ],
   status: ['sys/replication', 'sys/license', 'sys/seal'],
+};
+
+const ROUTE_PARAMS = {
+  access: '',
 };
 
 export default Service.extend({
@@ -55,6 +60,16 @@ export default Service.extend({
 
   hasNavPermission(navItem) {
     return PATHS[navItem].some(path => this.hasPermission(path));
+  },
+
+  navPathParams(navItem) {
+    const path = PATHS[navItem].find(path => this.hasPermission(path));
+    // if it is policies or tools, split, otherwise look through a map
+    if (['policies', 'tools'].includes(navItem.firstObject)) {
+      return path.split('/').lastObject;
+    }
+
+    return 'hello';
   },
 
   hasPermission(pathName) {
