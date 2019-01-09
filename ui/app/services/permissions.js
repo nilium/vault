@@ -25,8 +25,12 @@ const PATHS = {
   status: ['sys/replication', 'sys/license', 'sys/seal'],
 };
 
-const ROUTE_PARAMS = {
-  access: '',
+const ROUTE_PARAMS_TO_API_PATHS = {
+  policies: {
+    acl: 'sys/policies/acl',
+    rgp: 'sys/policies/rgp',
+    egp: 'sys/policies/egp',
+  },
 };
 
 export default Service.extend({
@@ -58,7 +62,12 @@ export default Service.extend({
     yield this.getPaths.perform();
   }),
 
-  hasNavPermission(navItem) {
+  hasNavPermission(navItem, routeParams) {
+    // debugger //eslint-disable-line
+    if (routeParams) {
+      //eslint-disable-line
+      return this.hasPermission(ROUTE_PARAMS_TO_API_PATHS[navItem][routeParams]);
+    }
     return PATHS[navItem].some(path => this.hasPermission(path));
   },
 
