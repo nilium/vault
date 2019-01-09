@@ -31,6 +31,22 @@ const ROUTE_PARAMS_TO_API_PATHS = {
     rgp: 'sys/policies/rgp',
     egp: 'sys/policies/egp',
   },
+  tools: {
+    wrap: 'sys/wrapping/wrap',
+    lookup: 'sys/wrapping/lookup',
+    unwrap: 'sys/wrapping/unwrap',
+    rewrap: 'sys/wrapping/rewrap',
+    random: 'sys/tools/random',
+    hash: 'sys/tools/hash',
+  },
+  access: {
+    methods: '/sys/auth',
+    entities: '/identity/entities',
+    groups: '/identity/groups',
+    leases: '/sys/leases/lookup',
+    namespaces: '/sys/namespaces',
+    'control-groups': '/sys/control -group/',
+  },
 };
 
 export default Service.extend({
@@ -63,9 +79,7 @@ export default Service.extend({
   }),
 
   hasNavPermission(navItem, routeParams) {
-    // debugger //eslint-disable-line
     if (routeParams) {
-      //eslint-disable-line
       return this.hasPermission(ROUTE_PARAMS_TO_API_PATHS[navItem][routeParams]);
     }
     return PATHS[navItem].some(path => this.hasPermission(path));
